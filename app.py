@@ -29,11 +29,11 @@ class Gui:
         self.scores_frame.grid(row=2)
         self.bottom_frame.grid(row=3)
 
-        self.game = tk.PhotoImage(file="game.png")
-        self.rock = tk.PhotoImage(file="rock.png")
-        self.paper = tk.PhotoImage(file="paper.png")
-        self.scissors = tk.PhotoImage(file="scissors.png")
-        self.questionmark = tk.PhotoImage(file="questionmark.png")
+        self.game = tk.PhotoImage(file="images/game.png")
+        self.rock = tk.PhotoImage(file="images/rock.png")
+        self.paper = tk.PhotoImage(file="images/paper.png")
+        self.scissors = tk.PhotoImage(file="images/scissors.png")
+        self.questionmark = tk.PhotoImage(file="images/questionmark.png")
 
         ttk.Label(self.header_frame, image=self.game).grid(
             row=0, column=0, rowspan=2, padx=5, pady=5
