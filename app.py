@@ -4,42 +4,9 @@
 
 
 import random
-
 import tkinter as tk
 from tkinter import ttk
-
-
-# game_image = [ROCK, PAPER, SCISSORS]
-
-# print("\nWelcome to the Rock, Paper, Scissors Game!\n")
-# user_selection = int(
-#     input("Please make your choice - Type 0 for Rock, 1 for Paper or 2 for Scissors...")
-# )
-# if user_selection < 0 or user_selection >= 3:
-#     print("You typed an incorrect number - GAME OVER!")
-# else:
-#     print(game_image[user_selection])
-#     cpu_selection = random.randint(0, 2)
-#     print("\nThe computer chose...\n")
-#     print(game_image[cpu_selection])
-#     if user_selection == 0 and cpu_selection == 2:
-#         print("\nYou Win!")
-#     elif user_selection == 0 and cpu_selection == 0:
-#         print("\nIt is a draw!")
-#     elif user_selection == 0 and cpu_selection == 1:
-#         print("\nYou Lose!")
-#     elif user_selection == 1 and cpu_selection == 0:
-#         print("\nYou Win!")
-#     elif user_selection == 1 and cpu_selection == 1:
-#         print("\nIt is a draw!")
-#     elif user_selection == 1 and cpu_selection == 2:
-#         print("\nYou Lose!")
-#     elif user_selection == 2 and cpu_selection == 1:
-#         print("\nYou Win!")
-#     elif user_selection == 2 and cpu_selection == 2:
-#         print("\nIt is a draw!")
-#     elif user_selection == 2 and cpu_selection == 0:
-#         print("\nYou Lose!")
+from tkinter import messagebox
 
 
 class Gui:
@@ -66,6 +33,7 @@ class Gui:
         self.rock = tk.PhotoImage(file="rock.png")
         self.paper = tk.PhotoImage(file="paper.png")
         self.scissors = tk.PhotoImage(file="scissors.png")
+        self.questionmark = tk.PhotoImage(file="questionmark.png")
 
         ttk.Label(self.header_frame, image=self.game).grid(
             row=0, column=0, rowspan=2, padx=5, pady=5
@@ -91,27 +59,42 @@ class Gui:
         ttk.Label(self.content_frame, text="Select Move:", font=("Arial", 16)).grid(
             row=2, column=0, padx=(61, 0), pady=(0, 5)
         )
-        self.player_move = tk.StringVar(self.content_frame)
+
+        def player_selection():
+            if self.player_move.get() == 0:
+                ttk.Label(self.content_frame, image=self.rock).grid(
+                    row=2, column=1, rowspan=4, sticky="s", padx=40
+                )
+            elif self.player_move.get() == 1:
+                ttk.Label(self.content_frame, image=self.paper).grid(
+                    row=2, column=1, rowspan=4, sticky="s", padx=40
+                )
+            elif self.player_move.get() == 2:
+                ttk.Label(self.content_frame, image=self.scissors).grid(
+                    row=2, column=1, rowspan=4, sticky="s", padx=40
+                )
+
+        self.player_move = tk.IntVar(self.content_frame)
         ttk.Radiobutton(
             self.content_frame,
             text="Rock",
             variable=self.player_move,
-            value="Rock",
-            #            command=selection,
+            value=0,
+            command=player_selection,
         ).grid(row=3, column=0, padx=(62, 0), sticky="w")
         ttk.Radiobutton(
             self.content_frame,
             text="Paper",
             variable=self.player_move,
-            value="Paper",
-            #            command=selection,
+            value=1,
+            command=player_selection,
         ).grid(row=4, column=0, padx=(62, 0), sticky="w")
         ttk.Radiobutton(
             self.content_frame,
             text="Scissors",
             variable=self.player_move,
-            value="Scissors",
-            #            command=selection,
+            value=2,
+            command=player_selection,
         ).grid(row=5, column=0, padx=(62, 0), sticky="w")
 
         ttk.Label(self.content_frame, image=self.rock).grid(
@@ -126,10 +109,80 @@ class Gui:
             row=2, column=4, padx=(0, 62), pady=(0, 5)
         )
 
-        ttk.Label(self.content_frame, image=self.rock).grid(
+        self.win_count = tk.IntVar(value=0)
+        self.loose_count = tk.IntVar(value=0)
+
+        def win():
+            self.winner.config(font=("Arial", 18), foreground="green", state=["normal"])
+            self.winner.insert("1.0", "xx           xx")
+            self.winner.insert("2.0", "xx YOU WIN xx")
+            self.winner.insert("3.0", "xx       xx")
+            self.winner.config(state=["disabled"])
+            self.win_count.set(self.win_count.get() + 1)
+            self.entry_player_wins.config(state="normal")
+            self.entry_player_wins.config(textvariable=self.win_count)
+            self.entry_player_wins.config(state=["readonly"])
+
+        def loose():
+            self.winner.config(font=("Arial", 18), foreground="red", state=["normal"])
+            self.winner.insert("1.0", "xx           xx")
+            self.winner.insert("2.0", "xx YOU LOOSE xx")
+            self.winner.insert("3.0", "xx       xx")
+            self.winner.config(state=["disabled"])
+            self.loose_count.set(self.loose_count.get() + 1)
+            self.entry_cpu_wins.config(state="normal")
+            self.entry_cpu_wins.config(textvariable=self.loose_count)
+            self.entry_cpu_wins.config(state=["readonly"])
+
+        def draw():
+            self.winner.config(
+                font=("Arial", 18), foreground="orange", state=["normal"]
+            )
+            self.winner.insert("1.0", "xx           xx")
+            self.winner.insert("2.0", "xx DRAW xx")
+            self.winner.insert("3.0", "xx       xx")
+            self.winner.config(state=["disabled"])
+
+        def play():
+            self.cpu_play = random.randint(0, 2)
+            if self.cpu_play == 0:
+                ttk.Label(self.content_frame, image=self.rock).grid(
+                    row=2, column=3, rowspan=4, sticky="s", padx=40
+                )
+            elif self.cpu_play == 1:
+                ttk.Label(self.content_frame, image=self.paper).grid(
+                    row=2, column=3, rowspan=4, sticky="s", padx=40
+                )
+            elif self.cpu_play == 2:
+                ttk.Label(self.content_frame, image=self.scissors).grid(
+                    row=2, column=3, rowspan=4, sticky="s", padx=40
+                )
+            self.play.state(["disabled"])
+            if self.player_move.get() == 0 and self.cpu_play == 2:
+                win()
+            elif self.player_move.get() == 0 and self.cpu_play == 0:
+                draw()
+            elif self.player_move.get() == 0 and self.cpu_play == 1:
+                loose()
+            elif self.player_move.get() == 1 and self.cpu_play == 0:
+                win()
+            elif self.player_move.get() == 1 and self.cpu_play == 1:
+                draw()
+            elif self.player_move.get() == 1 and self.cpu_play == 2:
+                loose()
+            elif self.player_move.get() == 2 and self.cpu_play == 1:
+                win()
+            elif self.player_move.get() == 2 and self.cpu_play == 2:
+                draw()
+            elif self.player_move.get() == 2 and self.cpu_play == 0:
+                loose()
+
+        ttk.Label(self.content_frame, image=self.questionmark).grid(
             row=2, column=3, rowspan=4, sticky="s", padx=40
         )
-        ttk.Button(self.content_frame, text="Play").grid(row=6, columnspan=5, pady=10)
+
+        self.play = ttk.Button(self.content_frame, text="Play", command=play)
+        self.play.grid(row=6, columnspan=5, pady=10)
 
         self.winner = tk.Text(
             self.content_frame,
@@ -140,30 +193,65 @@ class Gui:
         )
         self.winner.grid(row=9, columnspan=5)
 
-        ttk.Button(self.content_frame, text="Start Next Round").grid(
-            row=10, columnspan=5, pady=10
+        def next_round():
+            self.play.config(state=["normal"])
+            self.winner.config(state=["normal"])
+            self.winner.delete("1.0", "end")
+            self.winner.config(state=["disabled"])
+            ttk.Label(self.content_frame, image=self.questionmark).grid(
+                row=2, column=3, rowspan=4, sticky="s", padx=40
+            )
+
+        self.next = ttk.Button(
+            self.content_frame, text="Start Next Round", command=next_round
         )
+        self.next.grid(row=10, columnspan=5, pady=10)
 
         ttk.Label(self.scores_frame, text="PLAYER WINS", font=("Arial", 16)).grid(
             row=0, column=0, padx=(5, 0), pady=(5, 10)
         )
         self.entry_player_wins = ttk.Entry(
-            self.scores_frame, width=5, font=("Arial", 16)
+            self.scores_frame,
+            width=5,
+            font=("Arial", 16),
+            justify="center",
+            state=["readonly"],
         )
         self.entry_player_wins.grid(row=1, column=0, pady=(0, 10))
         ttk.Label(self.scores_frame, text=" CPU WINS  ", font=("Arial", 16)).grid(
             row=0, column=3, pady=(5, 10)
         )
-        self.entry_cpu_wins = ttk.Entry(self.scores_frame, width=5, font=("Arial", 16))
+        self.entry_cpu_wins = ttk.Entry(
+            self.scores_frame,
+            width=5,
+            font=("Arial", 16),
+            justify="center",
+            state=["readonly"],
+        )
         self.entry_cpu_wins.grid(row=1, column=3, pady=(0, 10))
-        ttk.Button(self.scores_frame, text="Clear Scores").grid(
+
+        def clear_scores():
+            self.entry_cpu_wins.config(state="normal")
+            self.entry_player_wins.config(state="normal")
+            self.entry_cpu_wins.delete("0", "end")
+            self.entry_player_wins.delete("0", "end")
+            self.entry_cpu_wins.config(state=["readonly"])
+            self.entry_player_wins.config(state=["readonly"])
+            self.win_count = tk.IntVar(value=0)
+            self.loose_count = tk.IntVar(value=0)
+
+        ttk.Button(self.scores_frame, text="Clear Scores", command=clear_scores).grid(
             row=0, column=1, rowspan=2, padx=(100, 120)
         )
 
-        ttk.Button(self.bottom_frame, text="Quit Game").grid(row=0, column=0, pady=10)
+        def quit_game():
+            self.exit = tk.messagebox.askquestion(title="Quit", message="Are you sure you want to quit ?")
+            if self.exit == 'yes':
+                master.destroy()
+            else:
+                tk.messagebox.showinfo('Return','You will now return to the game')
 
-
-#   def submit(self):
+        ttk.Button(self.bottom_frame, text="Quit Game", command=quit_game).grid(row=0, column=0, pady=10)
 
 
 def main():
@@ -175,10 +263,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-#        self.style = ttk.Style()
-#        self.style.configure("TFrame", background="#e1d8b9")
-#        self.style.configure("TButton", background="#e1d8b9")
-#        self.style.configure("TLabel", background="#e1d8b9", font=("Arial", 11))
-#        self.style.configure("Header.TLabel", font=("Arial", 18, "bold"))
