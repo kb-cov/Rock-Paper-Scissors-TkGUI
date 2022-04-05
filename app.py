@@ -110,7 +110,7 @@ class Gui:
         )
 
         self.win_count = tk.IntVar(value=0)
-        self.loose_count = tk.IntVar(value=0)
+        self.lose_count = tk.IntVar(value=0)
 
         def win():
             self.winner.config(font=("Arial", 18), foreground="green", state=["normal"])
@@ -123,15 +123,15 @@ class Gui:
             self.entry_player_wins.config(textvariable=self.win_count)
             self.entry_player_wins.config(state=["readonly"])
 
-        def loose():
+        def lose():
             self.winner.config(font=("Arial", 18), foreground="red", state=["normal"])
             self.winner.insert("1.0", "################")
-            self.winner.insert("2.0", "## YOU LOOSE  ##")
+            self.winner.insert("2.0", "##   YOU LOSE  ##")
             self.winner.insert("3.0", "################")
             self.winner.config(state=["disabled"])
-            self.loose_count.set(self.loose_count.get() + 1)
+            self.lose_count.set(self.lose_count.get() + 1)
             self.entry_cpu_wins.config(state="normal")
-            self.entry_cpu_wins.config(textvariable=self.loose_count)
+            self.entry_cpu_wins.config(textvariable=self.lose_count)
             self.entry_cpu_wins.config(state=["readonly"])
 
         def draw():
@@ -163,19 +163,19 @@ class Gui:
             elif self.player_move.get() == 0 and self.cpu_play == 0:
                 draw()
             elif self.player_move.get() == 0 and self.cpu_play == 1:
-                loose()
+                lose()
             elif self.player_move.get() == 1 and self.cpu_play == 0:
                 win()
             elif self.player_move.get() == 1 and self.cpu_play == 1:
                 draw()
             elif self.player_move.get() == 1 and self.cpu_play == 2:
-                loose()
+                lose()
             elif self.player_move.get() == 2 and self.cpu_play == 1:
                 win()
             elif self.player_move.get() == 2 and self.cpu_play == 2:
                 draw()
             elif self.player_move.get() == 2 and self.cpu_play == 0:
-                loose()
+                lose()
 
         ttk.Label(self.content_frame, image=self.questionmark).grid(
             row=2, column=3, rowspan=4, sticky="s", padx=40
@@ -238,7 +238,7 @@ class Gui:
             self.entry_cpu_wins.config(state=["readonly"])
             self.entry_player_wins.config(state=["readonly"])
             self.win_count = tk.IntVar(value=0)
-            self.loose_count = tk.IntVar(value=0)
+            self.lose_count = tk.IntVar(value=0)
 
         ttk.Button(self.scores_frame, text="Clear Scores", command=clear_scores).grid(
             row=0, column=1, rowspan=2, padx=(100, 120)
