@@ -114,9 +114,9 @@ class Gui:
 
         def win():
             self.winner.config(font=("Arial", 18), foreground="green", state=["normal"])
-            self.winner.insert("1.0", "xx           xx")
-            self.winner.insert("2.0", "xx YOU WIN xx")
-            self.winner.insert("3.0", "xx       xx")
+            self.winner.insert("1.0", "################")
+            self.winner.insert("2.0", "##    YOU WIN    ##")
+            self.winner.insert("3.0", "################")
             self.winner.config(state=["disabled"])
             self.win_count.set(self.win_count.get() + 1)
             self.entry_player_wins.config(state="normal")
@@ -125,9 +125,9 @@ class Gui:
 
         def loose():
             self.winner.config(font=("Arial", 18), foreground="red", state=["normal"])
-            self.winner.insert("1.0", "xx           xx")
-            self.winner.insert("2.0", "xx YOU LOOSE xx")
-            self.winner.insert("3.0", "xx       xx")
+            self.winner.insert("1.0", "################")
+            self.winner.insert("2.0", "## YOU LOOSE  ##")
+            self.winner.insert("3.0", "################")
             self.winner.config(state=["disabled"])
             self.loose_count.set(self.loose_count.get() + 1)
             self.entry_cpu_wins.config(state="normal")
@@ -138,9 +138,9 @@ class Gui:
             self.winner.config(
                 font=("Arial", 18), foreground="orange", state=["normal"]
             )
-            self.winner.insert("1.0", "xx           xx")
-            self.winner.insert("2.0", "xx DRAW xx")
-            self.winner.insert("3.0", "xx       xx")
+            self.winner.insert("1.0", "################")
+            self.winner.insert("2.0", "##      DRAW      ##")
+            self.winner.insert("3.0", "################")
             self.winner.config(state=["disabled"])
 
         def play():
